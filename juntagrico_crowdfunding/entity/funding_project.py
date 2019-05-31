@@ -1,4 +1,6 @@
 from django.db import models
+from juntagrico_crowdfunding.config import CrowdfundingConfig
+
 
 class FundingProject(models.Model):
     """
@@ -15,7 +17,8 @@ class FundingProject(models.Model):
     
     vocabulary_whoIsSponsor = models.TextField('Formular: Patenschaftsnennung', blank=True, null=True)
     vocabulary_confirmOrder = models.TextField('Formular: Kauf bestätigen', blank=True, null=True)
-    vocabulary_confirmOrderButton = models.CharField('Formular: Button Verbindlich bestätigen', max_length=200, blank=True, null=True)
+    vocabulary_confirmOrderButton = models.CharField('Formular: Button Verbindlich bestätigen',
+                                                     max_length=200, blank=True, null=True)
     
     vocabulary_thankYouTitle = models.CharField('Titel: Dankeschön', max_length=200, default='Vielen Dank')
     vocabulary_thankYouMessage = models.TextField('Text: Dankeschön', blank=True, null=True)
@@ -24,5 +27,5 @@ class FundingProject(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = 'Unterstützungs-Projekt'
-        verbose_name_plural = 'Unterstützungs-Projekte'
+        verbose_name = CrowdfundingConfig.vocabulary('funding_project')
+        verbose_name_plural = CrowdfundingConfig.vocabulary('funding_project_pl')

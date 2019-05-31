@@ -3,6 +3,7 @@ from django.db import models
 from math import ceil
 from juntagrico_crowdfunding.models import FundingProject
 
+
 class Fundable(models.Model):
     """
     A fundable object category
@@ -12,8 +13,8 @@ class Fundable(models.Model):
     description = models.TextField('Beschreibung')
     funding_project = models.ForeignKey(FundingProject, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField('Gesamtzahl')
-    price = models.DecimalField('Preis/Einheit', max_digits=9 ,decimal_places=2)
-    #allowFractions = models.BooleanField('Erlaube Teilbeiträge auf Einheiten')
+    price = models.DecimalField('Preis/Einheit', max_digits=9, decimal_places=2)
+    # allowFractions = models.BooleanField('Erlaube Teilbeiträge auf Einheiten')
     
     def __str__(self):
         return self.name
@@ -24,7 +25,7 @@ class Fundable(models.Model):
 
     @property
     def available(self):
-        return ceil( self.quantity - self.funded/self.price )
+        return ceil(self.quantity - self.funded / self.price)
 
     @property
     def funded(self):
@@ -35,8 +36,8 @@ class Fundable(models.Model):
 
     @property
     def funded_ratio(self):
-        return self.funded/(self.price*self.quantity)*100
+        return self.funded/(self.price * self.quantity) * 100
 
     @property
     def is_funded(self):
-        return self.funded >= self.price*self.quantity
+        return self.funded >= self.price * self.quantity

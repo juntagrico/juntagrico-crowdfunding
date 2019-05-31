@@ -29,8 +29,8 @@ Du findest hier eine Übersicht deiner Beiträge {{serverurl}}/cf/contribution
 {% endif %}
 Bitte beachte, dass es mehrere Tage dauern kann, bis deine Zahlung bestätigt wird.
 
-Bei Fragen helfen wir gerne weiter: it@mehalsgmues.ch
+Bei Fragen helfen wir gerne weiter: {% config "info_email" %}
 
-Bis bald und liebe Grüsse die Umbau-Gruppe
+Bis bald und liebe Grüsse die {% config "organisation_name" %}-Betriebsgruppe
 {% endblock %}
 

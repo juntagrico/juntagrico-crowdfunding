@@ -2,6 +2,7 @@ from django.forms import *
 
 from juntagrico_crowdfunding.models import Funder, Fund
 
+
 class RegisterFunderForm(ModelForm):
     class Meta:
         model = Funder

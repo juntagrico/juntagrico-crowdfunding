@@ -9,6 +9,7 @@ from juntagrico_crowdfunding.config import CrowdfundingConfig
 Server generated Emails
 '''
 
+
 def send_fund_confirmation_mail(fund, password=None):
 
     plaintext = get_template(CrowdfundingConfig.emails('fund_confirmation_mail'))

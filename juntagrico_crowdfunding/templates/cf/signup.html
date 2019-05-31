@@ -9,7 +9,7 @@
     {% if not user.is_authenticated %}
     <h4>Anmelden</h4>
 
-    <div>Für Mitglieder von {% config "organisation_name" %} und bestehende Paten</div>
+    <div>Für {% vocabulary "member_pl" %} von {% config "organisation_name" %} und bestehende Paten</div>
     <form action="/accounts/login/" method="post">
         {% csrf_token %}
         <br/><br/>
@@ -41,7 +41,7 @@
 
     {% endif %}
 
-    <form action="" method="post"id="new_member">
+    <form action="" method="post" id="new_member">
         {% csrf_token %}
         <div class="form-group row {% if funderform.last_name.errors %}invalid{% endif %}">
             <label class="col-md-3" for="id_last_name">Name *</label>
