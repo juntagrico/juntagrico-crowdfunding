@@ -1,0 +1,15 @@
+db.sqlite
+venv/*
+*.pyc
+static/*
+.idea
+settings_local.py
+*.bak
+ssl/*
+my_settings_local.py
+/.project
+*.db
+*.pdf
+**/dist
+**/*.egg-info
+.coverage
