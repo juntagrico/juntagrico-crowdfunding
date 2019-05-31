@@ -20,5 +20,4 @@ def send_fund_confirmation_mail(fund, password=None):
     }
 
     content = plaintext.render(d)
-
     send_mail(Config.organisation_name() + ' - Beitragsbestätigung', content, Config.info_email(), [fund.funder.email])

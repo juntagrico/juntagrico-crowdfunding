@@ -23,7 +23,7 @@ def get_menu_dict(request):
     if request.user.is_authenticated:
         if hasattr(request.user,"member"):
             renderdict = juntagrico_get_menu_dict(request)
-            renderdict.update({'is_member': True})
+            renderdict.update({'is_member': True, 'menu': {'crowdfunding': 'active'},})
             return renderdict
         elif hasattr(request.user,"funder"):
             return {'is_funder': True}
@@ -89,7 +89,6 @@ def view_fundable(request, fundable_id):
     #evaluate form
     if request.method == 'POST':
         # store order
-        print(request.POST)
         fundForm = FundForm(fundable.available, request.POST)
     elif request.session.get('pastorder') is not None: #when changing order
         fundForm = FundForm(fundable.available, request.session.get('pastorder') )
@@ -104,12 +103,10 @@ def view_fundable(request, fundable_id):
     if request.method == 'POST':
         if fundForm.is_valid():
             request.session['order'] = fundForm.cleaned_data
-            print(request.session.get('order'))
             request.session['pastorder'] = None #clear
             return HttpResponseRedirect('/cf/confirm')
 
     renderdict = get_menu_dict(request)
-    print(renderdict)
     renderdict.update({
         'fundable': fundable,
         'public_funds': fundable.fund_set.all,
@@ -134,29 +131,30 @@ def fund(request, fundable_id):
 
 def signup(request):
 
-    if request.method == 'POST':
-        initial = {}
-        if hasattr(request.user, 'member'): # copy from juntagrico member if available
-            member = request.user.member
-            initial = {
-                'first_name': member.first_name,
-                'last_name': member.last_name,
-                'addr_street': member.addr_street,
-                'addr_zipcode': member.addr_zipcode,
-                'addr_location': member.addr_location,
-                'phone': member.phone,
-                'email': member.email
-            }
+    initial = {}
+    if hasattr(request.user, 'member'): # copy from juntagrico member if available
+        member = request.user.member
+        initial = {
+            'first_name': member.first_name,
+            'last_name': member.last_name,
+            'addr_street': member.addr_street,
+            'addr_zipcode': member.addr_zipcode,
+            'addr_location': member.addr_location,
+            'phone': member.phone,
+            'email': member.email
+        }
 
+    if request.method == 'POST':
         funderform = RegisterFunderForm(request.POST, initial=initial)
     elif request.session.get('pastfunder') is not None: #when changing funder
         funderform = RegisterFunderForm(instance=request.session.get('pastfunder'))
     else:
-        funderform = RegisterFunderForm()
+        funderform = RegisterFunderForm(initial=initial)
 
-    renderdict = {
+    renderdict = get_menu_dict(request)
+    renderdict.update({
         'funderform': funderform
-    }
+    })
     return render(request, "cf/signup.html", renderdict)
 
 
@@ -193,7 +191,6 @@ def confirm(request):
 
     # process order
     order = request.session.get('order')
-    print(order)
     if order is None:
         return lost_session(request) # session expired
     else:
@@ -202,6 +199,7 @@ def confirm(request):
     # save confirmed order
     if request.POST.get('confirm') == '1':
         print("creating fund")
+        password = None
         if request.user.is_authenticated:
             funder.user = request.user
         else:
@@ -215,9 +213,10 @@ def confirm(request):
             sponsor=order.get('sponsor'),
             message=order.get('message')
         )
+        funding_project_id = order.get('fundable').funding_project.id
         
         #send confirmation email
-        send_fund_confirmation_mail(fund, funder)
+        send_fund_confirmation_mail(fund, password)
 
         funder.user.save()
         funder.save()
@@ -226,9 +225,10 @@ def confirm(request):
 
         # clear session and show thanks message
         request.session['funder'] = None
+        request.session['pastfunder'] = None
         request.session['order'] = None
         request.session['pastorder'] = None
-        return HttpResponseRedirect('/cf/thanks')
+        return HttpResponseRedirect('/cf/thanks/'+str(funding_project_id))
 
     # show summary to confirm
     renderdict = get_menu_dict(request)
@@ -271,12 +271,14 @@ def edit_funder(request):
     return HttpResponseRedirect('/cf/confirm/')
 
 
-def thanks(request):
+def thanks(request, funding_project_id=None):
     """
     Thank you page
     """
 
     renderdict = get_menu_dict(request)
+    if funding_project_id:
+        renderdict.update({ 'funding_project': FundingProject.objects.get(id=funding_project_id) })
     return render(request, "cf/thanks.html", renderdict)
 
 
