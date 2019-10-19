@@ -5,7 +5,7 @@ Basic Installation
 ------------------
 Add juntagrico-crowdfunding to the requirements.txt::
 
-    git+https://
+    git+https://github.com/juntagrico/juntagrico-crowdfunding.git
 
 Django Settings
 ---------------
