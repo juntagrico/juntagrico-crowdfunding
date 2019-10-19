@@ -13,23 +13,22 @@
         <div>{{ order.fundable.description }}</div>
         <div>Preis/Einheit: {{ order.fundable.price }} {% config "currency" %}</div>
         <div>Anzahl: {{ order.quantity }}</div>
-        <div>Pate(n): <b>{{ order.sponsor }}</b></div>
+        <div>Pate(n): <strong>{{ order.sponsor }}</strong></div>
         <div>Mitteilung: {{order.message}}</div>
-        <div>Dein Betrag: <b>{{ order.contribution }} {% config "currency" %}</b></div>
+        <div>Dein Betrag: <strong>{{ order.contribution }} {% config "currency" %}</strong></div>
         <a href="/cf/edit/order">Ändern</a>
         <br>
 
         <h4>Rechnungs- und Lieferadresse</h4>
-	    <p><b>{{ funder.first_name }} {{ funder.last_name }}</b><br>
+	    <p><strong>{{ funder.first_name }} {{ funder.last_name }}</strong><br>
         {{ funder.addr_street }}<br>
         {{ funder.addr_zipcode }} {{ funder.addr_location }}<br>
         {{ funder.phone }}<br>
-        <b>{{ funder.email }}</b><br>
+        <strong>{{ funder.email }}</strong><br>
         <a href="/cf/edit/funder">Ändern</a>
         </p>
-   
 
-	<p>{{ order.fundable.funding_project.vocabulary_confirmOrder|default:"Bei Bestätigung kaufst du eine Patenschaft und machst damit eine Schenkung an die Genossenschaft meh als gmües. Du bekommst eine Patenschaftsbestätigung (Karte - als Geschenk geeignet) per Post. Der Name, auf welchen die Patenschaft lautet, wird auf einer Tafel in der Gärtnerei verewigt." }}</p>
+	<p>{{ order.fundable.funding_project.vocabulary_confirmOrder|default:"Bei Bestätigung kaufst du eine Patenschaft" }}</p>
         <button name="confirm" value="1" class="btn btn-success" type="submit">{{ order.fundable.funding_project.vocabulary_confirmOrderButton|default:"Verbindlich bestätigen" }}</button>
         <a href="/cf">Abbrechen</a>
     </form>

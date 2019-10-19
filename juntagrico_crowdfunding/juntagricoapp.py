@@ -1,2 +1,4 @@
-def admin_menu_template():
-    return ['cf/crowdfunding_admin_menu.html']
+from juntagrico.util import addons
+
+
+addons.config.register_user_menu('cf/menu/crowdfunding_user_menu.html')
