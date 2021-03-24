@@ -1,6 +1,7 @@
 from django.forms import ModelForm, TextInput, IntegerField, HiddenInput, Textarea, NumberInput
 
-from juntagrico_crowdfunding.models import Funder, Fund
+from juntagrico_crowdfunding.entity.fund import Fund
+from juntagrico_crowdfunding.entity.funder import Funder
 
 
 class RegisterFunderForm(ModelForm):
