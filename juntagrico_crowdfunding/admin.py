@@ -2,8 +2,11 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from django.contrib.auth.models import User
-from juntagrico_crowdfunding.entity.fundable import *
-from juntagrico_crowdfunding.entity.fund import *
+
+from juntagrico_crowdfunding.entity.fund import Fund
+from juntagrico_crowdfunding.entity.fundable import Fundable
+from juntagrico_crowdfunding.entity.funder import Funder
+from juntagrico_crowdfunding.entity.funding_project import FundingProject
 
 
 class FundInline(admin.TabularInline):

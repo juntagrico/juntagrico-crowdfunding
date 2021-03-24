@@ -1,0 +1,5 @@
+[run]
+include =
+    juntagrico_crowdfunding/*
+omit =
+    juntagrico_crowdfunding/migrations/*

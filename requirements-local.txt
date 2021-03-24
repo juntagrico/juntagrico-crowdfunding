@@ -1,1 +1,3 @@
 git+http://github.com/juntagrico/juntagrico.git
+coverage
+flake8

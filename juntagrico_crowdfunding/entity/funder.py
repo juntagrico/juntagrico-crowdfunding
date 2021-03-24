@@ -18,7 +18,7 @@ class Funder(models.Model):
     addr_zipcode = models.CharField('PLZ', max_length=10)
     addr_location = models.CharField('Ort', max_length=50)
     phone = models.CharField('Telefonnr', max_length=50, null=True, blank=True)
-    
+
     def __str__(self):
         return "%s %s" % (self.first_name, self.last_name)
 

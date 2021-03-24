@@ -1,12 +1,13 @@
 from django.contrib.auth.models import User
 
 from juntagrico.models import Member
-from juntagrico_crowdfunding.models import Funder
+
+from juntagrico_crowdfunding.entity.funder import Funder
+
 
 class AuthenticateWithEmail(object):
     @staticmethod
     def authenticate(request, username=None, password=None):
-        
         try:
             user = Member.objects.get(email__iexact=username).user
             if user.check_password(password) and not user.member.inactive:

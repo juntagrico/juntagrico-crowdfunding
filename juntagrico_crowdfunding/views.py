@@ -4,17 +4,16 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from juntagrico_crowdfunding.forms import *
-
-from juntagrico_crowdfunding.models import Fundable
-from juntagrico_crowdfunding.models import Fund
-from juntagrico_crowdfunding.models import FundingProject
-from juntagrico_crowdfunding.models import Funder
+from juntagrico_crowdfunding.entity.fund import Fund
+from juntagrico_crowdfunding.entity.fundable import Fundable
+from juntagrico_crowdfunding.entity.funder import Funder
+from juntagrico_crowdfunding.entity.funding_project import FundingProject
 
 from juntagrico.views import get_menu_dict as juntagrico_get_menu_dict
 from juntagrico.util.management import password_generator
 
-from juntagrico_crowdfunding.mailer import *
+from juntagrico_crowdfunding.forms import FundForm, RegisterFunderForm
+from juntagrico_crowdfunding.mailer import send_fund_confirmation_mail
 
 
 def get_menu_dict(request):

@@ -1,7 +1,7 @@
 from django.db import models
 
-from juntagrico_crowdfunding.models import Funder
-from juntagrico_crowdfunding.models import Fundable
+from juntagrico_crowdfunding.entity.fundable import Fundable
+from juntagrico_crowdfunding.entity.funder import Funder
 
 
 class Fund(models.Model):
@@ -17,7 +17,7 @@ class Fund(models.Model):
     date_paid = models.DateField('Bezahlt am', blank=True, null=True)
     message = models.TextField('Mitteilung', blank=True, null=True)
     comment = models.TextField('Kommentar', blank=True, null=True)
-    
+
     def __str__(self):
         return 'Beitrag %s' % self.pk
 

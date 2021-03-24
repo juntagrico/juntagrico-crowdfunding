@@ -46,7 +46,6 @@ jobs:
         ./cc-test-reporter upload-coverage -i coverageupload
     - name: flake 8
         flake8 --count --ignore E501 juntagrico_crowdfunding
-        flake8 --count --ignore E501 test
     - name: Slack notification
       if: ${{  env.SLACK_WEBHOOK != null && github.event_name == 'push' && always()}}
       env:
