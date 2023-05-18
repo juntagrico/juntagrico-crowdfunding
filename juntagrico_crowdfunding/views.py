@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -9,32 +10,22 @@ from juntagrico_crowdfunding.entity.fundable import Fundable
 from juntagrico_crowdfunding.entity.funder import Funder
 from juntagrico_crowdfunding.entity.funding_project import FundingProject
 
-from juntagrico.views import get_menu_dict as juntagrico_get_menu_dict
 from juntagrico.util.management import password_generator
 
 from juntagrico_crowdfunding.forms import FundForm, RegisterFunderForm
 from juntagrico_crowdfunding.mailer import send_fund_confirmation_mail
 
-
-def get_menu_dict(request):
-    if request.user.is_authenticated:
-        if hasattr(request.user, "member"):
-            renderdict = juntagrico_get_menu_dict(request)
-            renderdict.update({'is_member': True, 'menu': {'crowdfunding': 'active'}, })
-            return renderdict
-        elif hasattr(request.user, "funder"):
-            return {'is_funder': True}
-    return {}
+from juntagrico.view_decorators import highlighted_menu
 
 
 def lost_session(request):
     """
     Session lost. start over
     """
-    renderdict = get_menu_dict(request)
-    return render(request, "cf/session_lost.html", renderdict)
+    return render(request, "cf/session_lost.html")
 
 
+@highlighted_menu('crowdfunding')
 def list_funding_projects(request):
     """
     List of fundingprojects
@@ -46,15 +37,13 @@ def list_funding_projects(request):
         return list_fundables(request, funding_projects[0].id)
 
     else:
-
-        renderdict = get_menu_dict(request)
-        renderdict.update({
+        renderdict = {
             'funding_projects': funding_projects
-        })
-
+        }
         return render(request, "cf/list_funding_projects.html", renderdict)
 
 
+@highlighted_menu('crowdfunding')
 def list_fundables(request, funding_project_id):
     """
     List of fundables
@@ -67,16 +56,16 @@ def list_fundables(request, funding_project_id):
         if hasattr(request.user, 'funder'):  # is funder
             my_funds = Fund.objects.filter(funder=request.user.funder, fundable__funding_project=funding_project_id)
 
-    renderdict = get_menu_dict(request)
-    renderdict.update({
+    renderdict = {
         'fp': FundingProject.objects.filter(id=funding_project_id)[0],
         'fundables': fundables,
         'my_funds': my_funds
-    })
+    }
 
     return render(request, "cf/list_fundables.html", renderdict)
 
 
+@highlighted_menu('crowdfunding')
 def view_fundable(request, fundable_id):
     """
     Details of fundable
@@ -101,17 +90,17 @@ def view_fundable(request, fundable_id):
         if fund_form.is_valid():
             request.session['order'] = fund_form.cleaned_data
             request.session['pastorder'] = None  # clear
-            return HttpResponseRedirect('/cf/confirm')
+            return HttpResponseRedirect(reverse('jcf:confirm'))
 
-    renderdict = get_menu_dict(request)
-    renderdict.update({
+    renderdict = {
         'fundable': fundable,
         'public_funds': fundable.fund_set.all,
         'fundForm': fund_form
-    })
+    }
     return render(request, "cf/view_fundable.html", renderdict)
 
 
+@highlighted_menu('crowdfunding')
 def fund(request, fundable_id):
     """
     Confirm funding
@@ -119,13 +108,13 @@ def fund(request, fundable_id):
 
     fundable = Fundable.objects.filter(id=fundable_id)[0]
 
-    renderdict = get_menu_dict(request)
-    renderdict.update({
+    renderdict = {
         'fundable': fundable
-    })
+    }
     return render(request, "cf/fund.html", renderdict)
 
 
+@highlighted_menu('crowdfunding')
 def signup(request):
     initial = {}
     if hasattr(request.user, 'member'):  # copy from juntagrico member if available
@@ -147,13 +136,13 @@ def signup(request):
     else:
         funder_form = RegisterFunderForm(initial=initial)
 
-    renderdict = get_menu_dict(request)
-    renderdict.update({
+    renderdict = {
         'funderform': funder_form
-    })
+    }
     return render(request, "cf/signup.html", renderdict)
 
 
+@highlighted_menu('crowdfunding')
 def confirm(request):
     """
     Confirm Fund
@@ -221,17 +210,17 @@ def confirm(request):
         request.session['pastfunder'] = None
         request.session['order'] = None
         request.session['pastorder'] = None
-        return HttpResponseRedirect('/cf/thanks/' + str(funding_project_id))
+        return HttpResponseRedirect(reverse('jcf:thanks', args=[funding_project_id]))
 
     # show summary to confirm
-    renderdict = get_menu_dict(request)
-    renderdict.update({
+    renderdict = {
         'order': order,
         'funder': funder
-    })
+    }
     return render(request, "cf/confirm.html", renderdict)
 
 
+@highlighted_menu('crowdfunding')
 def edit_order(request):
     """
     go back to order page
@@ -243,9 +232,10 @@ def edit_order(request):
     # delete order from session and pass its content to the order form
     request.session['pastorder'] = request.session.get('order')
     request.session['order'] = None
-    return HttpResponseRedirect('/cf/view/' + str(request.session['pastorder'].get('fundable').id) + '/')
+    return HttpResponseRedirect(reverse('jcf:view', args=[request.session['pastorder'].get('fundable').id]))
 
 
+@highlighted_menu('crowdfunding')
 def edit_funder(request):
     """
     change funder but keep order
@@ -261,21 +251,23 @@ def edit_funder(request):
         request.session['pastfunder'] = request.session.get('funder')
         request.session['funder'] = None
 
-    return HttpResponseRedirect('/cf/confirm/')
+    return HttpResponseRedirect(reverse('jcf:confirm'))
 
 
+@highlighted_menu('crowdfunding')
 def thanks(request, funding_project_id=None):
     """
     Thank you page
     """
 
-    renderdict = get_menu_dict(request)
+    renderdict = {}
     if funding_project_id:
         renderdict.update({'funding_project': FundingProject.objects.get(id=funding_project_id)})
-    return render(request, "cf/thanks.html", renderdict)
+    return render(request, "cf/thanks.html")
 
 
 @login_required
+@highlighted_menu('crowdfunding')
 def contribution(request):
     """
     List of personal contributions
@@ -285,9 +277,7 @@ def contribution(request):
     if hasattr(request.user, 'funder'):  # is funder
         contributions = Fund.objects.filter(funder=request.user.funder)
 
-    renderdict = get_menu_dict(request)
-    renderdict.update({
+    renderdict = {
         'contributions': contributions
-    })
-
+    }
     return render(request, "cf/contribution.html", renderdict)

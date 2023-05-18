@@ -1,5 +1,5 @@
 {% extends "cf/public_access_wrapper.html" %}
-{% load config %}
+{% load juntagrico.config %}
 {% block page_title %}
     <h3>{{ fundable.name }}</h3>
 {% endblock %}
@@ -16,7 +16,7 @@
     <br>
     <h4>Ermöglichen</h4>
 
-    <form action="/cf/view/{{ fundable.id }}/" method="POST">
+    <form action="{% url 'jcf:view' fundable.id %}" method="POST">
         {% csrf_token %}
         <div class="form-group row {% if fundForm.quantity.errors %}invalid{% endif %}">
             <label class="col-md-4" for="id_quantity">{{ fundForm.quantity.label }}&nbsp;*</label>

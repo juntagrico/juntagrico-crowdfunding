@@ -1,5 +1,5 @@
 {% extends "cf/public_access_wrapper.html" %}
-{% load config %}
+{% load juntagrico.config %}
 {% block page_title %}
     <h3>Deine Patenschaften</h3>
 {% endblock %}
@@ -20,8 +20,8 @@
 	    <tbody> 
             {% for m in contributions %}
             <tr>
-                <td><a href="/cf/list/{{ m.fundable.funding_project.id }}">{{ m.fundable.funding_project.title }}</a></td>
-            	<td><a href="/cf/view/{{ m.fundable.id }}">{{ m.fundable.name }}</a></td>
+                <td><a href="{% url 'jcf:list' m.fundable.funding_project.id %}">{{ m.fundable.funding_project.title }}</a></td>
+            	<td><a href="{% url 'jcf:view' m.fundable.id %}">{{ m.fundable.name }}</a></td>
             	<td>{{ m.contribution }}&nbsp;{% config "currency" %}</td>
           	    <td>{{ m.date_ordered }}</td>
             	<td>{{ m.date_paid | default_if_none:"Ausstehend" }}</td>
@@ -31,7 +31,7 @@
     </table>
     {% else %}
     <div>Du hast noch keine Projekte unterstützt.</div>
-    <div><a href="/cf">Zu den Projekten</a></div>
+    <div><a href="{% url 'jcf:home' %}">Zu den Projekten</a></div>
     {% endif %}
 
 {% endblock %}

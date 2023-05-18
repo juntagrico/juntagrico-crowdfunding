@@ -1,5 +1,5 @@
 {% extends "cf/public_access_wrapper.html" %}
-{% load config %}
+{% load juntagrico.config %}
 {% load crowdfunding_config %}
 {% block page_title %}
     <h3>{% vocabulary "funding_project_pl" %}</h3>
@@ -10,7 +10,7 @@
     {% if funding_projects.count > 0 %}
     <ul>
         {% for f in funding_projects %}
-        <li><a href="/cf/list/{{ f.id }}">{{ f.title }}</a></li>
+        <li><a href="{% url 'jcf:list' f.id %}">{{ f.title }}</a></li>
         {% endfor %}
     </ul>
     {% else %}

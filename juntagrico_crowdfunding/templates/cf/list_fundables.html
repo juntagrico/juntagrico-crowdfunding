@@ -1,5 +1,5 @@
 {% extends "cf/public_access_wrapper.html" %}
-{% load config %}
+{% load juntagrico.config %}
 {% block page_title %}
     <h3>{{ fp.title }}</h3>
 {% endblock %}
@@ -19,7 +19,7 @@
             {% for f in fundables %}
             {% if f.available > 0 %}
             <tr>
-            	<td><a href="/cf/view/{{ f.id }}">{{ f.name }}</a></td>
+            	<td><a href="{% url 'jcf:view' f.id %}">{{ f.name }}</a></td>
             	<td>{{ f.available }}</td>
             	<td>{{ f.price }} {% config "currency" %}</td>
             </tr>
@@ -29,7 +29,7 @@
             {% for f in fundables %}
             {% if f.available == 0 %}
             <tr>
-            	<td><s><a href="/cf/view/{{ f.id }}">{{ f.name }}</a></s></td>
+            	<td><s><a href="{% url 'jcf:view' f.id %}">{{ f.name }}</a></s></td>
             	<td><s>{{ f.available }}</s></td>
             	<td><s>{{ f.price }} {% config "currency" %}</s></td>
             </tr>
@@ -53,7 +53,7 @@
 	    <tbody> 
             {% for m in my_funds %}
             <tr>
-            	<td><a href="/cf/view/{{ m.fundable.id }}">{{ m.fundable.name }}</a></td>
+            	<td><a href="{% url 'jcf:view' m.fundable.id %}">{{ m.fundable.name }}</a></td>
             	<td>{{ m.contribution }} {% config "currency" %}</td>
           	    <td>{{ m.date_ordered }}</td>
             	<td>{{ m.date_paid | default_if_none:"Ausstehend" }}</td>

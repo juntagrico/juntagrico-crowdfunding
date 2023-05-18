@@ -1,5 +1,5 @@
 {% extends "cf/public_access_wrapper.html" %}
-{% load config %}
+{% load juntagrico.config %}
 {% block page_title %}
     <h3>Rechnungs- und Lieferadresse</h3>
 {% endblock %}
@@ -34,7 +34,7 @@
                 <a href="/my/newpassword">Neues Passwort anfordern</a>
             </div>
         </div>
-        <input type="hidden" name="next" value="/cf/confirm"/>
+        <input type="hidden" name="next" value="{% url 'jcf:confirm' %}"/>
     </form>
 
     <h4>Ich bin neu hier</h4>

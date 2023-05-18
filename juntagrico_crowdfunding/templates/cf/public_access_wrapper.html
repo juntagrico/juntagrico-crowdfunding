@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block allcontent %}
-    {% if user.is_authenticated and is_member %}
+    {% if user.is_authenticated and user.member %}
         {{ block.super }}
     {% else %}
-        {% if user.is_authenticated and is_funder %}
+        {% if user.is_authenticated and user.funder %}
             {% include "cf/funder_menu.html" %}
             <div class="col-md-6">
         {% else %}
