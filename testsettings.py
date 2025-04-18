@@ -100,6 +100,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'juntagrico.context_processors.vocabulary',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
@@ -115,3 +116,5 @@ LOGIN_REDIRECT_URL = "/"
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 IMPORT_EXPORT_EXPORT_PERMISSION_CODE = 'view'
+
+ENABLE_SHARES = True
